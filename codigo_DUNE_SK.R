@@ -7,7 +7,7 @@ rm(list=ls()) #Eliminamos las variables que tengamos
 library(latex2exp)
 library(extrafont) 
 font_import(pattern = "lmroman*") 
-#En este algoritmo resumiré la mayoría de aspectos vistos en este algoritmo de cadenas 
+#En este algoritmo resumirÃ© la mayorÃ­a de aspectos, pues son parecidos a lo visto en el algoritmo para minimizar las gaussianas invertidas
 loadfonts(device = "win")
 par(family = "LM Roman 12")
 windowsFonts("LM Roman 12"= windowsFont("LM Roman 12"))
@@ -19,7 +19,7 @@ theta = pi/4
 E = 10 #GeV
 deltam = 2.5*10^(-3) #Electronvolts al cuadrado
 R = 6371 #Radio de la Tierra (km)
-Ratm <- R+15 #Radio de los neutrinos atmosféricos (km)
+Ratm <- R+15 #Radio de los neutrinos atmosfÃ©ricos (km)
 Rdet <- R-1 #Profundidad del detector (km)
 
 #Funcion de las oscilaciones
@@ -29,7 +29,7 @@ oscil <- function(L, angulo, masacuad){
 }
 
 #Longitud recorrida en funcion del coseno del angulo de mezcla
-L <-function(c){ #Para generar los puntos como argumento el coseno del ángulo
+L <-function(c){ #Para generar los puntos como argumento el coseno del Ã¡ngulo
   y = sqrt(Ratm^2-Rdet^2*(1-c^2)) - Rdet*c
   return(y)
 }
@@ -44,7 +44,7 @@ for(k in 1:10){
   valoresfun<- c(valoresfun,rnorm(1,oscil(L(c2[k]),theta,deltam),0.05))
 }
 
-testf <- function(xx){ #Vamos a coger nuestra función de oscilaciones
+testf <- function(xx){ #Vamos a coger nuestra funciÃ³n de oscilaciones
   #x1 angulo y x2 incremento de masa al cuadrado
   x1 <- xx[1] 
   x2 <- xx[2]
@@ -56,9 +56,9 @@ c2 = seq(-1, 1, length.out=10)#puntos equiespaciados ente -1 y 1 del coseno
 for (k in 1:10){
   c = c2[k] 
 valoresL = c(valoresL, L(c)) #Almacena los valores de L
-y <- y +(valoresfun[k] - oscil(L(c),x1,x2))^2 #Ya hemos generado nuestra función
-#que tendremos que minimizar es la suma cuadratica de las distancias entre nuestros
-#puntos generados y la funcion dependiendo de los parametros a ajustar que en este
+y <- y +(valoresfun[k] - oscil(L(c),x1,x2))^2 
+#La funcion que tendremos que minimizar es la suma cuadratica de las distancias entre nuestros
+#puntos generados y la funcion de las oscilaciones, que dependede los parametros a ajustar que en este
 #caso son la masa y el angulo
 }
 return(y)
@@ -127,13 +127,15 @@ repetir<-function(ss){
 #Inicializamos el mejor valor a 5 pues estamos buscando un minimo que es 0
 bestvalue = 5;
 
-#De un gran número de cadenas que generamos seleccionamos el mejor valor, es decir el
+#De un gran nÃºmero de cadenas que generamos seleccionamos el mejor valor, es decir el
 #valor minimo, lo hacemos asi para tener una poblacion estadistica significativa
-#pues el valor que se obtiene depende mucho del punto inicial
+#pues el valor que se obtiene depende mucho del punto inicial. Cabe destacar que para hacer las 300
+#cadenas de este codigo se tarda mucho tiempo. Si lo Ãºnico que se pretende es ver que funciona, poner menos cadenas
+#en el siguiente bucle for
 
 for(k in 1:300){
   y<-repetir(c(runif(1,0.6,0.9),runif(1,0.0015,0.0035)))$best;
-    if(testf(y) < bestvalue ){ #Esto nos devolverá el mejor mínimo de todas
+    if(testf(y) < bestvalue ){ #Esto nos devolverÃ¡ el mejor mÃ­nimo de todas
       ybest<-y
       bestvalue<-testf(y)
   }
@@ -141,9 +143,9 @@ for(k in 1:300){
 
 print(ybest)
 print(bestvalue)
-#Obtenemos una buena estimación de nuestros parámetros
+#Obtenemos una buena estimaciÃ³n de nuestros parÃ¡metros
 
-#Representamos ahora los 10 datos y la función a la que se han ajustado.
+#Representamos ahora los 10 datos y la funciÃ³n a la que se han ajustado.
 c1 = seq(-1, 1, length.out=1000);
 c2 = seq(-1, 1, length.out=10);
 par(mfrow=c(1,2))
@@ -190,7 +192,7 @@ testf <- function(xx){ #Vamos a crear la funcion a minimizar al igual que con SK
   E2 <- seq(0.5,8,length.out=20);
   for (k in 1:20){
     E =  E2[k]
-    y <- y +(valoresfun[k] - oscil(E,x1,x2,x3,x4,x5))^2 #Ya hemos generado nuestra función
+    y <- y +(valoresfun[k] - oscil(E,x1,x2,x3,x4,x5))^2 #Ya hemos generado nuestra funciÃ³n
   }
   return(y)
 }
@@ -258,11 +260,13 @@ repetir<-function(ss){
 
 bestvalue = 5;
 
-#De un gran número de cadenas que generamos seleccionamos el mejor valor
+#De un gran nÃºmero de cadenas que generamos seleccionamos el mejor valor. Cabe destacar que para hacer las 300
+#cadenas de este codigo se tarda mucho tiempo. Si lo Ãºnico que se pretende es ver que funciona, poner menos cadenas
+#en el siguiente bucle for
 
-for(k in 1:5){
+for(k in 1:300){
   y<-repetir(c(runif(1,0.50,0.65),runif(1,0.80,0.95),runif(1,0.10,0.20),runif(1,6*10^(-5),8*10^(-5)),runif(1,0.0020,0.0030)))$best;
-  if(testf(y) < bestvalue ){ #Esto nos devolverá el mejor mínimo de todas
+  if(testf(y) < bestvalue ){ #Esto nos devolverÃ¡ el mejor mÃ­nimo de todas
     ybest<-y
     bestvalue<-testf(y)
   }
@@ -277,7 +281,7 @@ points(E2, valoresfun)
 
 print(ybest)
 print(bestvalue)
-
+#Obtenemos unos resultados extremadamente precisos, con este algoritmo simple
 
 
 
