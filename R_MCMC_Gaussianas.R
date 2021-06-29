@@ -1,6 +1,6 @@
-#En este codigo se presentara el método MCMC para encontrar el mínimo principal
-#de una doble gaussiana, así como de una gaussiana simple. Se estudiaran ademas
-#los diferentes parámetros de los que depende el algoritmo
+#En este codigo se presentara el mÃ©todo MCMC para encontrar el mÃ­nimo principal
+#de una doble gaussiana, asÃ­ como de una gaussiana simple. Se estudiaran ademas
+#los diferentes parÃ¡metros de los que depende el algoritmo
 
 rm(list=ls()) #Inicialmente borramos todas las variables que esten en la memoria
 
@@ -9,7 +9,6 @@ library(ggplot2)
 library(latex2exp)
 library(extrafont) 
 font_import(pattern = "lmroman*") 
-#En este algoritmo resumiré la mayoría de aspectos vistos en este algoritmo de cadenas 
 loadfonts(device = "win")
 par(family = "LM Roman 12")
 windowsFonts("LM Roman 12"= windowsFont("LM Roman 12"))
@@ -18,7 +17,7 @@ testf <- function(xx) #Test para una funcion de dos variables
 {x1 <- xx[1] #Cogemos la primera variable
 x2 <- xx[2] #Cogemos la segunda variable
 
-#Mi función es la suma de dos distribuciones normales
+#Mi funciÃ³n es la suma de dos distribuciones normales
 make.mvn <- function(mean, vcv) {
   logdet <- as.numeric(determinant(vcv, TRUE)$modulus)
   tmp <- length(mean) * log(2 * pi) + logdet
@@ -35,7 +34,7 @@ vcv1 = matrix(c(1, .25, .25, 1.5), 2, 2) #matriz de distribucion normal en 2D
 vcv2 = matrix(c(2, -.5, -.5, 2), 2, 2)
 f1 = make.mvn(mu1, vcv1)
 f2 = make.mvn(mu2, vcv2)
-y= -(f1(xx) + f2(xx)) #Suma  de las dos gaussianas negativas
+y= -(f1(xx) + f2(xx)) #Suma  de las dos gaussianas invertidas
 return(y)
 }
 
@@ -54,17 +53,17 @@ simulated_annealing <- function(func, s0, niter , step, sigma ) {
   #vector para acumular resultados
   track1<-vector() 
   track2<-vector()
-  track1<-c(track1,s0[1])#c función que combina los argumentos
+  track1<-c(track1,s0[1])#c funciÃ³n que combina los argumentos
   track2<-c(track2,s0[2])
   
   #Empieza el cuerpo del algoritmo que se repite hasta las iteraciones, niter
   for (k in 1:niter) {     
     Temp <- (1 - step)^k #Temperatura se va haciendo cada vez mas sensible, temperatura geometrica
     #Temp <- 1/log(1 + k) Temperatura logaritmica
-    # Consideramos unos vecinos a nuestro punto aleatorios
+    #Determinaremos ahora el nuevo punto como un vecino del punto inicial
     #El nuevo punto es un valor gaussiano aleatorio  centado en el actual, s_c 
     #con una anchura de 0.15 para ambas variables
-    s_n <- rnorm(2, s_c, sigma) #El vecino nuevo es aleatorio, 2 valores por las dos variables, la media es el valor de antes y desviación estándar0.15 
+    s_n <- rnorm(2, s_c, sigma) #El vecino nuevo es aleatorio que sigue una distribucion gaussiana, 2 valores por las dos variables, la media es el valor de antes y desviaciÃ³n estÃ¡ndar 0.15 
     f_n <- func(s_n) #Calcula el nuevo valor
     # actualizamos el estado actua
     if (f_n < f_c || runif(1, 0, 1) < exp(-(f_n - f_c) / Temp)) {
@@ -73,7 +72,7 @@ simulated_annealing <- function(func, s0, niter , step, sigma ) {
       #sea menor que la exponencial exp(-(f_n - f_c) / Temp)
       s_c <- s_n
       f_c <- f_n
-      track1<-c(track1,s_n[1]) #añade el de antes mas el nuevo
+      track1<-c(track1,s_n[1]) #aÃ±ade el de antes mas el nuevo
       track2<-c(track2,s_n[2])
     }
     #actualizamos el mejor estado, si el nuevo valor de la funcion es menos que
@@ -113,7 +112,7 @@ replicate(10,{y<-repetir(runif(2,-5,5))$values;lines(y[1,],y[2,], col="#00000088
 
 #A continuacion contamos las cadenas que se van de los dos minimos, las que van al
 #minimo principal, las que van al secundario y de entre todas las cadenas,
-#sacamos el valor de la función minimo que sera el mejor
+#sacamos el valor de la funciÃ³n minimo que sera el mejor
 cadenasquesevan=0;
 minprincipal=0;
 minsecundario=0;
@@ -125,7 +124,7 @@ for(k in 1:1000){
   y<-repetir(runif(2,-5,5))$best;
   if(( -1.1 < y[1]) && (y[1] < -.9)){
     minprincipal<-minprincipal+1 #Aqui contamos las cadenas que van al principal
-    if(testf(y)<bestvalue){ #Esto nos devolvera el mejor mínimo de todas las cadenas
+    if(testf(y)<bestvalue){ #Esto nos devolvera el mejor mÃ­nimo de todas las cadenas
       ybest<-y
      bestvalue<-testf(y)
     }
@@ -150,12 +149,12 @@ print(bestvalue)
 #Vemos de estos resultados que muy pocas cadenas se van, y la mayoria van al 
 #minimo principal, aunque un gran numero de las cadenas van tambien al secundario
 #esto es asi porque no hemos dejado a la cadena recorrer todo el espacio de 
-#fases y es muy sensible al valor inicial, pero es muy precisa
+#variables independientes y es muy sensible al valor inicial, pero es muy precisa
 
-#Hacemos ahora dejando recorrer más espacio a las cadenas
+#Hacemos ahora dejando recorrer mÃ¡s espacio a las cadenas
 #Aumentamos las iteraciones, con la temperatura logaritmica, aumentamos anchura
 
-#Nuevo algoritmo con la temperatura logaritmica
+#Nuevo algoritmo con la temperatura logaritmica. 
 simulated_annealing <- function(func, s0, niter , step, sigma ) {
   
   s_b <- s_c <- s_n <- s0 
@@ -211,8 +210,8 @@ ybest = c(0,0);
 for(k in 1:1000){
   y<-repetir(runif(2,-5,5))$best;
   if(( -1.1 < y[1]) && (y[1] < -.9)){
-    minprincipal<-minprincipal+1 #Aquí contamos las cadenas que van al principal
-    if(testf(y)<bestvalue){ #Esto nos devolverá el mejor mínimo de todas las cadenas
+    minprincipal<-minprincipal+1 #AquÃ­ contamos las cadenas que van al principal
+    if(testf(y)<bestvalue){ #Esto nos devolverÃ¡ el mejor mÃ­nimo de todas las cadenas
       ybest<-y
       bestvalue<-testf(y)
     }
@@ -231,8 +230,8 @@ print(minprincipal)
 print(minsecundario)
 print(ybest)
 print(bestvalue)
-#Si hacemos esto muchísimas cadenas se nos van y no convergen bien, aunque haya
-#más proporción de las que se van al mínimo principal, la mayoria no van a 
+#Si hacemos esto, muchÃ­simas cadenas se nos van y no convergen bien, aunque haya
+#mÃ¡s proporciÃ³n de las que se van al mÃ­nimo principal, la mayoria no van a 
 #ninguno de los dos minimos
 
 #Aplicamos ahora este algoritmo a una sola gaussiana
@@ -247,7 +246,7 @@ make.mvn <- function(mean, vcv) {
   }
 }
 
-testf <- function(xx) #Test para una función de dos variables
+testf <- function(xx) #Test para una funciÃ³n de dos variables
 {x1 <- xx[1] #Cogemos la primera variable
 x2 <- xx[2] #Cogemos la segunda variable
 mu1 = c(-1, 1) 
@@ -322,12 +321,14 @@ for(k in 1:1000){
 }
 
 print(cadenasquesevan)
+#Como vemos con una sola gaussiana se van muy pocas cadenas, con lo que tenemos un metodo rapido y eficaz para
+#encontrar el minimo de una funcion multivariable
 print(minprincipal)
 print(minsecundario)
 print(ybest)
 print(bestvalue)
 
-#Concluimos que al poner una sola gaussiana la inmensa mayoría convergen al minimo
+#Concluimos que al poner una sola gaussiana la inmensa mayorÃ­a convergen al minimo
 #lo que corrobora la potencia del metodo
 
 
