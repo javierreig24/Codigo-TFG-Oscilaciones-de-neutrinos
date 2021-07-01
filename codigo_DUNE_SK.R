@@ -49,7 +49,7 @@ testf <- function(xx){ #Vamos a coger nuestra función de oscilaciones
   x1 <- xx[1] 
   x2 <- xx[2]
 
-#Creamos un cector con los valores de L
+#Creamos un vector con los valores de L
 valoresL<-vector()
 y = 0;
 c2 = seq(-1, 1, length.out=10)#puntos equiespaciados ente -1 y 1 del coseno
@@ -64,7 +64,7 @@ y <- y +(valoresfun[k] - oscil(L(c),x1,x2))^2
 return(y)
 }
 
-#A continuacion el algoritmo  de MCMC simulated annealing, como vemos los 
+#A continuacion el algoritmo  de MCMC simulated annealing. Como vemos los 
 #parametros de entrada son la funcion que se quiere minimizar (func), el valor
 #inicial (s0), el numero de iteraciones (niter) y el paso (step). En este caso
 #la anchura de la gaussiana para generar el siguiente punto esta dentro de esta
@@ -86,7 +86,7 @@ simulated_annealing <- function(func, s0, niter , step) {
  
   for (k in 1:niter) {     
     Temp <- (1 - step)^k #Temperatura geometrica
-    #Para generar los nuevos valores en este caso, se hacen de los dos parametros
+    #Para generar los nuevos valores en este caso, se hacen de los parametros
     #por separado pues tienen valores muy distintos
     s_n[1] <- rnorm(1, s_c[1], .004) 
     #Sabemos (y en los experimentos reales tambien) que nuestro valor esta dentro de un
@@ -128,9 +128,9 @@ repetir<-function(ss){
 bestvalue = 5;
 
 #De un gran número de cadenas que generamos seleccionamos el mejor valor, es decir el
-#valor minimo, lo hacemos asi para tener una poblacion estadistica significativa
+#valor minimo, lo hacemos asi para tener una poblacion estadistica significativa,
 #pues el valor que se obtiene depende mucho del punto inicial. Cabe destacar que para hacer las 300
-#cadenas de este codigo se tarda mucho tiempo. Si lo único que se pretende es ver que funciona, poner menos cadenas
+#cadenas de este codigo se tarda mucho tiempo. Si lo único que se pretende es ver que funciona, se han de poner menos cadenas
 #en el siguiente bucle for
 
 for(k in 1:300){
@@ -261,7 +261,7 @@ repetir<-function(ss){
 bestvalue = 5;
 
 #De un gran número de cadenas que generamos seleccionamos el mejor valor. Cabe destacar que para hacer las 300
-#cadenas de este codigo se tarda mucho tiempo. Si lo único que se pretende es ver que funciona, poner menos cadenas
+#cadenas de este codigo se tarda mucho tiempo. Si lo único que se pretende es ver que funciona, se han de poner menos cadenas
 #en el siguiente bucle for
 
 for(k in 1:300){
