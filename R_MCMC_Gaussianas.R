@@ -60,12 +60,12 @@ simulated_annealing <- function(func, s0, niter , step, sigma ) {
   for (k in 1:niter) {     
     Temp <- (1 - step)^k #Temperatura se va haciendo cada vez mas sensible, temperatura geometrica
     #Temp <- 1/log(1 + k) Temperatura logaritmica
-    #Determinaremos ahora el nuevo punto como un vecino del punto inicial
+    #Determinaremos ahora el nuevo punto como un vecino del punto actual
     #El nuevo punto es un valor gaussiano aleatorio  centado en el actual, s_c 
-    #con una anchura de 0.15 para ambas variables
-    s_n <- rnorm(2, s_c, sigma) #El vecino nuevo es aleatorio que sigue una distribucion gaussiana, 2 valores por las dos variables, la media es el valor de antes y desviación estándar 0.15 
+    #con una anchura de sigma para ambas variables
+    s_n <- rnorm(2, s_c, sigma) #El vecino nuevo es aleatorio que sigue una distribucion gaussiana, 2 valores por las dos variables, la media es el valor de antes y desviación estándar sigma 
     f_n <- func(s_n) #Calcula el nuevo valor
-    # actualizamos el estado actua
+    # actualizamos el estado actual
     if (f_n < f_c || runif(1, 0, 1) < exp(-(f_n - f_c) / Temp)) {
       #Para que el nuevo valor pase a ser el actual, este ha de ser menor que 
       #el valor guardado como actual o que un numero aleatorio entre 0 y 1
@@ -147,8 +147,8 @@ print(bestvalue)
 
 
 #Vemos de estos resultados que muy pocas cadenas se van, y la mayoria van al 
-#minimo principal, aunque un gran numero de las cadenas van tambien al secundario
-#esto es asi porque no hemos dejado a la cadena recorrer todo el espacio de 
+#minimo principal, aunque un gran numero de las cadenas van tambien al secundario.
+#Esto es asi porque no hemos dejado a la cadena recorrer todo el espacio de 
 #variables independientes y es muy sensible al valor inicial, pero es muy precisa
 
 #Hacemos ahora dejando recorrer más espacio a las cadenas
